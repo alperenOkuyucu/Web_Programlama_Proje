@@ -1,0 +1,73 @@
+@model UcakRezervasyonSitesi.Models.KoltukSecimiData
+
+@{
+    ViewData["Title"] = "Koltuk Seçimi";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Koltuk Seçimi | @Model.Ucak.KalkisNoktasi -> @Model.Ucak.VarisNoktasi</h2>
+
+    <div class="mt-3">
+        <p>Uçak Modeli: @Model.Ucak.Model</p>
+        <p>Koltuk Düzeni: @Model.Ucak.KoltukSatir x @Model.Ucak.KoltukSutun</p>
+    </div>
+
+    <table id="seat-map" class="table table-bordered">
+        @for (int i = 0; i < Model.Ucak.KoltukSatir; i++)
+        {
+            <tr>
+                @for (int j = 0; j < Model.Ucak.KoltukSutun; j++)
+                {
+                    int seatNumber = (i * Model.Ucak.KoltukSutun) + j + 1;
+                    <td class="seat text-center" data-row="@i" data-column="@j" onclick="selectSeat(this)">
+                        @seatNumber
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+
+    <form method="post" id="seat-selection-form" action="@Url.Action("Odeme", "Ana")">
+        <input type="hidden" id="kullaniciAdi" name="KullaniciAdi" value="@Model.Kullanici.KullaniciAdi" />
+        <input type="hidden" id="kullaniciId" name="KullaniciId" value="@Model.Kullanici.KullaniciId" />
+        <input type="hidden" id="secilenKoltukSayisi" name="SecilenKoltukSayisi" value="0" />
+        <input type="hidden" id="koltukBasiFiyat" name="KoltukBasiFiyat" value="@Model.Ucak.KoltukFiyati" />
+        <button type="submit" id="confirm-selection" class="btn btn-primary mt-3">Onayla</button>
+    </form>
+</div>
+
+<style>
+    .seat {
+        cursor: pointer;
+        border: 1px solid #000;
+        width: 40px;
+        height: 40px;
+        display: inline-block;
+        margin: 2px;
+        line-height: 40px;
+        vertical-align: middle;
+        user-select: none;
+    }
+    .seat.selected {
+        background-color: #6c757d;
+        color: white;
+    }
+</style>
+
+<script>
+    function selectSeat(seat) {
+        seat.classList.toggle('selected');
+    }
+
+    document.getElementById('confirm-selection').addEventListener('click', function(event) {
+        let selectedSeats = document.querySelectorAll('.seat.selected');
+        let secilenKoltukSayisi = selectedSeats.length;
+
+        document.getElementById('secilenKoltukSayisi').value = secilenKoltukSayisi;
+
+        if (secilenKoltukSayisi === 0) {
+            alert('Lütfen en az bir koltuk seçiniz.');
+            event.preventDefault();
+        }
+    });
+</script>

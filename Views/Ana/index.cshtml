@@ -1,0 +1,62 @@
+@using Microsoft.AspNetCore.Http
+@model UcakRezervasyonSitesi.Models.UcusArama
+
+@{
+    var noktaSecenekleri = ViewBag.NoktaSecenekleri as List<string>;
+    ViewData["Title"] = "Ana Sayfa";
+    var username = Context.Session.GetString("Username"); 
+}
+
+<div class="container mt-4">
+    <div class="card" style="background-color: #061b30; color: rgb(237, 237, 237);">
+        <div class="card-body text-center">
+            @if (!string.IsNullOrEmpty(username))
+            {
+                <h2>Hoş Geldiniz, @username!</h2>
+                <a asp-action="CikisYap" asp-controller="Ana" class="btn btn-warning">Çıkış Yap</a>
+                
+                <div class="container mt-4">
+                    <div class="card" style="width: 300px; margin: 0 auto; color: #000">
+                        <div class="card-body">
+                            <h2 class="card-title text-center">Uçuş Rezervasyonu</h2>
+
+                            <form asp-controller="Ana" asp-action="UcusAra" method="post">
+                                <div class="form-group mb-3">
+                                    <label for="KalkisHavalimani" class="form-label">Kalkış Havalimanı:</label>
+                                    <select id="KalkisHavalimani" asp-for="KalkisHavalimani" class="form-control">
+                                        @foreach(var nokta in noktaSecenekleri)
+                                        {
+                                            <option value="@nokta">@nokta</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="VarisHavalimani" class="form-label">Varış Havalimanı:</label>
+                                    <select id="VarisHavalimani" asp-for="VarisHavalimani" class="form-control">
+                                        @foreach(var nokta in noktaSecenekleri)
+                                        {
+                                            <option value="@nokta">@nokta</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="UcusTarihi" class="form-label">Uçuş Tarihi:</label>
+                                    <input type="date" id="UcusTarihi" asp-for="UcusTarihi" class="form-control" />
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Uçuş Ara</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <h2>Havayolu Rezervasyon Sistemimize Hoş Geldiniz</h2>
+                <p>Lütfen rezervasyon yapmak için <a asp-action="Giris" asp-controller="Ana" class="btn btn-link">giriş yapın</a> ya da <a asp-action="KayitOl" asp-controller="Ana" class="btn btn-link">kayıt olun</a>.</p>
+            }
+        </div>
+    </div>
+</div>

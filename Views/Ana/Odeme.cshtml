@@ -1,0 +1,18 @@
+@model KoltukOdemeTalimati
+
+<div class="container mt-4">
+    <h2 class="text-center">Ödeme Detayları</h2>
+
+    <p>Seçilen Koltuk Sayısı: @Model.SecilenKoltukSayisi</p>
+    <p>Koltuk Başına Fiyat: @Model.KoltukBasiFiyat.ToString()₺</p>
+    <p>Toplam Fiyat: @((Model.SecilenKoltukSayisi * Model.KoltukBasiFiyat).ToString("C"))</p>
+
+    <h3 class="mt-4">Kredi Kartı Bilgileri</h3>
+    <form id="mockPaymentForm" class="mt-3">
+        <div class="form-group">
+            <label for="cardNumber">Kart Numarası:</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="1111 2222 3333 4444" class="form-control">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="alert('Sahte ödeme işlendi')">Ödeme Yap</button>
+    </form>
+</div>

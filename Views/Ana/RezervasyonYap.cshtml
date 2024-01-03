@@ -1,0 +1,32 @@
+@model List<UcakRezervasyonSitesi.Models.Ucak>
+
+@{
+    ViewData["Title"] = "Uçuş Rezervasyonu";
+}
+
+<h2 class="text-center mb-4">Uçuş Rezervasyonu</h2>
+
+@if(Model != null && Model.Any())
+{
+    foreach (var ucak in Model)
+    {
+        <div class="card mb-3 rounded">
+            <div class="card-body">
+                <h3 class="card-title">@ucak.Model</h3>
+                <p class="card-text">Rota: @ucak.KalkisNoktasi -> @ucak.VarisNoktasi</p>
+                <p class="card-text">Koltuk Düzeni: @ucak.KoltukSatir x @ucak.KoltukSutun</p>
+
+                <form asp-action="KoltukSecimi" asp-controller="Ana" method="post">
+                    <input type="hidden" name="ucakId" value="@ucak.Id" />
+                    <button type="submit" class="btn btn-primary">Rezervasyon Yap</button>
+                </form>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        Uçuş bulunamadı.
+    </div>
+}
